@@ -13,7 +13,7 @@ from setuptools.command.bdist_wheel import bdist_wheel
 class CMakeBuild(build_ext):
     def build_extension(self, ext):
         if self.editable_mode:
-            install_dir = Path.cwd() / "src" / "qt_dev"
+            raise RuntimeError("This library cannot be installed in editable mode")
         else:
             install_dir = (Path.cwd() / self.get_ext_fullpath("")).parent.resolve() / "qt_dev"
 
