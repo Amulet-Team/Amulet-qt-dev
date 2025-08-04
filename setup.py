@@ -28,6 +28,7 @@ class CMakeBuild(build_ext):
             else:
                 platform_post_args.extend(["-A", "Win32"])
             platform_post_args.extend(["-T", "v143"])
+            platform_post_args.append("-DQT_FEATURE_directwrite3=ON")
         elif sys.platform == "darwin":
             if platform.machine() == "arm64":
                 platform_post_args.append("-DCMAKE_OSX_ARCHITECTURES=x86_64;arm64")
