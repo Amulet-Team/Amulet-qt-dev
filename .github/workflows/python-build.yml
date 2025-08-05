@@ -9,8 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ '3.9' ]
-        os: [ macos-14, windows-latest ]
+        os: [ macos-14, windows-2025, ubuntu-24.04 ]
 
     runs-on: ${{ matrix.os }}
     defaults:
@@ -24,14 +23,25 @@ jobs:
     - name: Install Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.9'
+        python-version: '3.12'
 
     - name: Install dependencies
       shell: bash
       run: |
         pip install build twine
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '6.9.1'
+
+    - name: Copy Qt
+      run: |
+        cp -rv ${QT_ROOT_DIR} ./src/qt_dev
+
     - name: Build
+      env:
+        AMULET_SKIP_COMPILE: 1
       run: |
         python -m build .
 

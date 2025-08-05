@@ -12,6 +12,9 @@ from setuptools.command.bdist_wheel import bdist_wheel
 
 class CMakeBuild(build_ext):
     def build_extension(self, ext):
+        if os.environ.get("AMULET_SKIP_COMPILE", None):
+            return
+
         if self.editable_mode:
             raise RuntimeError("This library cannot be installed in editable mode")
         else:
@@ -74,7 +77,10 @@ class BDistWheel(bdist_wheel):
         python, abi, plat = super().get_tag()
 
         if python.startswith("cp"):
-            return "py3", "none", plat
+            python = "py3"
+            abi = "none"
+        if plat.startswith("linux_"):
+            plat = f"manylinux_2_24_{plat[6:]}"
 
         return python, abi, plat
 
